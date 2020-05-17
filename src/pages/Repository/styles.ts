@@ -42,12 +42,21 @@ export const RepositoryInfo = styled.section`
       strong {
         font-size: 36px;
         color: #3d3d4d;
+
+        @media (max-width: 675px) {
+          max-width: 500px;
+          font-size: 26px;
+        }
       }
 
       p {
         font-size: 18px;
         color: #737380;
         margin-top: 4px;
+
+        @media (max-width: 675px) {
+          font-size: 15px;
+        }
       }
     }
   }
@@ -72,6 +81,16 @@ export const RepositoryInfo = styled.section`
         display: block;
         margin-top: 4px;
         color: #6c6c80;
+      }
+
+      @media (max-width: 675px) {
+        & + li {
+          margin-left: 50px;
+        }
+
+        strong {
+          font-size: 26px;
+        }
       }
     }
   }
@@ -111,12 +130,20 @@ export const Issues = styled.div`
       strong {
         font-size: 20px;
         color: #3d3d4d;
+
+        @media (max-width: 675px) {
+          font-size: 18px;
+        }
       }
 
       p {
         font-size: 18px;
         color: #a8a8b3;
         margin-top: 4px;
+
+        @media (max-width: 675px) {
+          font-size: 16px;
+        }
       }
     }
 

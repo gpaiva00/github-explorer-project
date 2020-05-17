@@ -11,6 +11,10 @@ export const Title = styled.h1`
   margin-top: 80px;
   max-width: 450px;
   line-height: 56px;
+
+  @media (max-width: 675px) {
+    font-size: 40px;
+  }
 `;
 
 export const Form = styled.form<FormProps>`
@@ -49,6 +53,22 @@ export const Form = styled.form<FormProps>`
 
     &:hover {
       background: ${shade(0.2, '#04d361')};
+    }
+  }
+
+  @media (max-width: 675px) {
+    display: block;
+
+    input {
+      width: 100%;
+      height: 60px;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 16px;
+      height: 60px;
+      border-radius: 5px;
     }
   }
 `;
@@ -100,6 +120,10 @@ export const Repositories = styled.div`
         font-size: 18px;
         color: #a8a8b3;
         margin-top: 4px;
+
+        @media (max-width: 675px) {
+          font-size: 15px;
+        }
       }
     }
 
