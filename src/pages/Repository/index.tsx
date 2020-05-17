@@ -13,6 +13,7 @@ interface Repository {
   stargazers_count: number;
   open_issues_count: number;
   forks_count: number;
+  updated_at: number;
   owner: {
     login: string;
     avatar_url: string;
@@ -36,6 +37,26 @@ const Repository: FC = () => {
   const { params } = useRouteMatch<RouteParams>();
   const [repository, setRepository] = useState<Repository | null>(null);
   const [issues, setIssues] = useState<Issue[]>([]);
+
+  const months = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
+  function getDate(date: number): string {
+    const newDate = new Date(date);
+    return `${months[newDate.getUTCMonth()]}/${newDate.getFullYear()}`;
+  }
   /**
    * Duas requisições devem acontecer ao mesmo tempo pois uma não depende da outra
    * Para isso temos o promise all onde podemos passar um array de requisições
@@ -84,6 +105,7 @@ const Repository: FC = () => {
             <div>
               <strong>{repository.full_name}</strong>
               <p>{repository.description}</p>
+              <small>Atualizado em: {getDate(repository.updated_at)}</small>
             </div>
           </header>
           <ul>

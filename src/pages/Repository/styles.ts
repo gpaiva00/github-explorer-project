@@ -58,6 +58,13 @@ export const RepositoryInfo = styled.section`
           font-size: 15px;
         }
       }
+
+      small {
+        font-size: 15px;
+        display: block;
+        margin-top: 16px;
+        color: #a8a8b3;
+      }
     }
   }
 
@@ -137,9 +144,9 @@ export const Issues = styled.div`
       }
 
       p {
-        font-size: 18px;
         color: #a8a8b3;
         margin-top: 4px;
+        font-size: 18px;
 
         @media (max-width: 675px) {
           font-size: 16px;
