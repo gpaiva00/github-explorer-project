@@ -8,7 +8,7 @@ const Routes: FC = () => (
   // Switch garante que apenas uma rota seja exibida. E não as duas
   <Switch>
     <Route path="/" exact component={Dashboard} />
-    <Route path="/repository" component={Repository} />
+    <Route path="/repository/:repositoryFullName+" component={Repository} />
   </Switch>
 );
 
