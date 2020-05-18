@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { shade } from 'polished';
+import { shade, lighten } from 'polished';
 
 interface FormProps {
   hasError: boolean;
@@ -74,8 +74,9 @@ export const Form = styled.form<FormProps>`
 `;
 
 export const SugestionList = styled.ul`
+  position: absolute;
   display: block;
-  border: 1px solid #fff;
+  border: 0.5px solid #cbcbd3;
   border-radius: 0 0 5px 5px;
   border-top-width: 0;
   list-style: none;
@@ -85,7 +86,7 @@ export const SugestionList = styled.ul`
   padding-left: 0;
   max-width: 490px;
   align-items: center;
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
   background-color: #fff;
 
   li {
@@ -100,7 +101,7 @@ export const SugestionList = styled.ul`
     }
 
     &:not(:last-of-type) {
-      border-bottom: 1px solid #cbcbd3;
+      border-bottom: 0.5px solid #cbcbd3;
     }
   }
 `;
