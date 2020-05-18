@@ -73,6 +73,38 @@ export const Form = styled.form<FormProps>`
   }
 `;
 
+export const SugestionList = styled.ul`
+  display: block;
+  border: 1px solid #fff;
+  border-radius: 0 0 5px 5px;
+  border-top-width: 0;
+  list-style: none;
+  margin-top: 0;
+  max-height: 143px;
+  overflow-y: auto;
+  padding-left: 0;
+  max-width: 490px;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fff;
+
+  li {
+    padding: 10px 18px;
+    color: #a8a8b3;
+    transition: font-weight 0.2s;
+
+    &:hover {
+      color: #3a3a3a3;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #cbcbd3;
+    }
+  }
+`;
+
 export const Repositories = styled.div`
   margin-top: 80px;
   max-width: 700px;

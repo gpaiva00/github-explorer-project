@@ -5,7 +5,7 @@ import logoImg from '../../assets/logo.svg';
 
 import api from '../../services/api';
 
-import { Title, Form, Repositories, Error } from './styles';
+import { Title, Form, Repositories, Error, SugestionList } from './styles';
 
 interface Repository {
   full_name: string;
@@ -27,6 +27,13 @@ const Dashboard: FC = () => {
     if (storagedRepositories) return JSON.parse(storagedRepositories);
     return [];
   });
+
+  const activeSuggestion = 0;
+  const filteredSuggestions = [
+    'tagged-images',
+    'github-explorer-project',
+    'multiplication-table',
+  ];
 
   async function handleAddRepository(
     event: FormEvent<HTMLFormElement>
@@ -66,6 +73,27 @@ const Dashboard: FC = () => {
         />
         <button type="submit">Pesquisar</button>
       </Form>
+
+      <SugestionList>
+        {filteredSuggestions.map((suggestion, index) => {
+          let className;
+
+          // Flag the active suggestion with a class
+          // if (index === activeSuggestion) {
+          //   className = "suggestion-active";
+          // }
+
+          return (
+            <li
+              // className={className}
+              key={suggestion}
+              // onClick={onClick}
+            >
+              {suggestion}
+            </li>
+          );
+        })}
+      </SugestionList>
 
       {errorMessage && <Error>{errorMessage}</Error>}
 
