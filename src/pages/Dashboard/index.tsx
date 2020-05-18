@@ -87,19 +87,19 @@ const Dashboard: FC = () => {
         <input
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyUp={(e) => handleSearchByUser(e)}
+          // onKeyUp={(e) => handleSearchByUser(e)}
           placeholder="Digite aqui o nome do repositório"
         />
         <button type="submit">Pesquisar</button>
       </Form>
 
-      {userRepositories.length > 0 && (
+      {/* {userRepositories.length > 0 && (
         <SugestionList>
           {userRepositories.map((repository) => (
             <li key={repository.name}>{repository.name}</li>
           ))}
         </SugestionList>
-      )}
+      )} */}
 
       {errorMessage && <Error>{errorMessage}</Error>}
 
