@@ -43,16 +43,22 @@ const Dashboard: FC = () => {
   const history = useHistory();
 
   async function handleSearchByUser(): Promise<void> {
-    const [user] = inputValue.split('/');
+    try {
+      const [user] = inputValue.split('/');
+      if (!user) return;
 
-    if (!user) return;
+      setIsLoading(true);
 
-    setIsLoading(true);
+      const { data } = await api.get<Repository[]>(
+        `users/${user.trim()}/repos`
+      );
 
-    const { data } = await api.get<Repository[]>(`users/${user.trim()}/repos`);
+      setUserRepositories([...userRepositories, ...data]);
+      setErrorMessage('');
+    } catch {
+      setErrorMessage('Desculpe, houve um erro ao buscar os repositórios');
+    }
 
-    setUserRepositories([...userRepositories, ...data]);
-    setErrorMessage('');
     setIsLoading(false);
   }
 
@@ -81,6 +87,7 @@ const Dashboard: FC = () => {
     if (!value.newValue.length) {
       localStorage.setItem('@Githubexplorer:inputValue', '');
       setUserRepositories([]);
+      setErrorMessage('');
     }
 
     setInputValue(value.newValue);
@@ -102,13 +109,6 @@ const Dashboard: FC = () => {
             repositoryName
         );
   }
-
-  // Autosuggest will pass through all these props to the input.
-  const inputProps = {
-    placeholder: 'Nome de usuário / nome do repositório',
-    value: inputValue,
-    onChange,
-  };
 
   useEffect(() => {
     localStorage.setItem(
@@ -135,7 +135,11 @@ const Dashboard: FC = () => {
           renderSuggestion={(suggestion: Repository) => (
             <div>{suggestion.name}</div>
           )}
-          inputProps={inputProps}
+          inputProps={{
+            placeholder: 'Nome de usuário / nome do repositório',
+            value: inputValue,
+            onChange,
+          }}
         />
 
         <button type="submit">

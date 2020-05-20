@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState, useContext, useMemo } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
+import ShimmerComponent from '../../components/ShimmerRepositoryPage';
 
 import api from '../../services/api';
 
@@ -42,6 +43,7 @@ const Repository: FC = () => {
   const [repository, setRepository] = useState<Repository>();
   const [issues, setIssues] = useState<Issue[]>([]);
   const { favorites, setFavorites } = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   const months = [
     'Janeiro',
@@ -164,6 +166,8 @@ const Repository: FC = () => {
           </div>
         </RepositoryInfo>
       )}
+
+      {/* {isLoading && <ShimmerComponent />} */}
 
       {issues.length ? (
         <Issues>
