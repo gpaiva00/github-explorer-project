@@ -1,15 +1,14 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  FormEvent,
-  KeyboardEvent,
-} from 'react';
+import React, { FC, useState, useEffect, FormEvent, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
+
 import { FiChevronRight } from 'react-icons/fi';
 import logoImg from '../../assets/logo.svg';
+
+import { AppContext } from '../../contexts/AppContext';
 
 import api from '../../services/api';
 
@@ -33,15 +32,13 @@ const Dashboard: FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [userRepositories, setUserRepositories] = useState<Repository[]>([]);
   const [suggestions, setSuggestions] = useState<Repository[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [repositories, setRepositories] = useState<Repository[]>(() => {
-    const storagedRepositories = localStorage.getItem(
-      '@Githubexplorer:repositories'
-    );
+  const [inputValue, setInputValue] = useState(
+    () => localStorage.getItem('@Githubexplorer:inputValue') || ''
+  );
 
-    if (storagedRepositories) return JSON.parse(storagedRepositories);
-    return [];
-  });
+  const { favorites, setFavorites } = useContext(AppContext);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const history = useHistory();
 
@@ -50,23 +47,13 @@ const Dashboard: FC = () => {
 
     if (!user) return;
 
+    setIsLoading(true);
+
     const { data } = await api.get<Repository[]>(`users/${user.trim()}/repos`);
 
     setUserRepositories([...userRepositories, ...data]);
     setErrorMessage('');
-  }
-
-  async function addToFavorite(
-    event: FormEvent<HTMLFormElement>
-  ): Promise<void> {
-    try {
-      const { data: repo } = await api.get<Repository>(`repos/${inputValue}`);
-
-      setRepositories([...repositories, repo]);
-      setErrorMessage('');
-    } catch {
-      setErrorMessage('Não foi possível adicionar esse repositório');
-    }
+    setIsLoading(false);
   }
 
   // eslint-disable-next-line consistent-return
@@ -78,6 +65,8 @@ const Dashboard: FC = () => {
 
     if (searchTermIsNotValid)
       return setErrorMessage('Digite o usuário "/" repositório');
+
+    localStorage.setItem('@Githubexplorer:inputValue', inputValue);
 
     history.push(`/repository/${inputValue}`);
   }
@@ -99,7 +88,7 @@ const Dashboard: FC = () => {
 
   function getSuggestions(value: string): Repository[] {
     if (value.indexOf('/') === -1) return [];
-    console.log(value);
+
     const [, repository] = value.split('/');
     const repositoryName = repository.trim().toLowerCase();
     const repositoryLength = repositoryName.length;
@@ -114,11 +103,6 @@ const Dashboard: FC = () => {
         );
   }
 
-  function handleSuggestionClick(suggestion: Repository): string {
-    localStorage.setItem('@Githubexplorer:inputValue', suggestion.full_name);
-    return suggestion.full_name;
-  }
-
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
     placeholder: 'Nome de usuário / nome do repositório',
@@ -129,17 +113,9 @@ const Dashboard: FC = () => {
   useEffect(() => {
     localStorage.setItem(
       '@Githubexplorer:repositories',
-      JSON.stringify(repositories)
+      JSON.stringify(favorites)
     );
-  }, [repositories]);
-
-  useEffect(() => {
-    const storagedInputValue = localStorage.getItem(
-      '@Githubexplorer:inputValue'
-    );
-
-    if (storagedInputValue) setInputValue(storagedInputValue);
-  }, []);
+  }, [favorites]);
 
   return (
     <>
@@ -155,20 +131,35 @@ const Dashboard: FC = () => {
           onSuggestionsClearRequested={() => {
             setSuggestions([]);
           }}
-          getSuggestionValue={handleSuggestionClick}
+          getSuggestionValue={(suggestion) => suggestion.full_name}
           renderSuggestion={(suggestion: Repository) => (
             <div>{suggestion.name}</div>
           )}
           inputProps={inputProps}
         />
 
-        <button type="submit">Pesquisar</button>
+        <button type="submit">
+          {isLoading ? (
+            <Loader
+              type="Oval"
+              color="#fff"
+              height={40}
+              width={40}
+              timeout={3000}
+            />
+          ) : (
+            'Pesquisar'
+          )}
+        </button>
       </Form>
 
       {errorMessage && <Error>{errorMessage}</Error>}
 
       <Repositories>
-        {repositories.map((repository) => (
+        <strong className="title">Favoritos</strong>
+
+        {!favorites.length && <p>Não há favoritos por enquanto.</p>}
+        {favorites.map((repository) => (
           <Link
             key={repository.full_name}
             to={`repository/${repository.full_name}`}

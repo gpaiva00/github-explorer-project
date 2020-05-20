@@ -1,14 +1,17 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext, useMemo } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
 
 import api from '../../services/api';
 
+import { AppContext } from '../../contexts/AppContext';
+
 import { Header, RepositoryInfo, Issues, NoIssues } from './styles';
 import logoImg from '../../assets/logo.svg';
 
 interface Repository {
+  name: string;
   full_name: string;
   description: string;
   stargazers_count: number;
@@ -36,8 +39,9 @@ interface RouteParams {
 
 const Repository: FC = () => {
   const { params } = useRouteMatch<RouteParams>();
-  const [repository, setRepository] = useState<Repository | null>(null);
+  const [repository, setRepository] = useState<Repository>();
   const [issues, setIssues] = useState<Issue[]>([]);
+  const { favorites, setFavorites } = useContext(AppContext);
 
   const months = [
     'Janeiro',
@@ -58,6 +62,30 @@ const Repository: FC = () => {
     const newDate = new Date(date);
     return `${months[newDate.getUTCMonth()]}/${newDate.getFullYear()}`;
   }
+
+  function addToFavorite(): void {
+    const favoriteIndex = favorites.findIndex(
+      (repo) => repo.full_name === repository?.full_name
+    );
+
+    if (!repository) return;
+
+    const newFavorites = [...favorites];
+
+    if (favoriteIndex === -1) newFavorites.push(repository);
+    else newFavorites.splice(favoriteIndex, 1);
+
+    setFavorites(newFavorites);
+  }
+
+  const isFavorite = useMemo(
+    () =>
+      favorites.findIndex(
+        (favorite) => favorite.full_name === params.repositoryFullName
+      ) !== -1,
+    [favorites, params.repositoryFullName]
+  );
+
   /**
    * Duas requisições devem acontecer ao mesmo tempo pois uma não depende da outra
    * Para isso temos o promise all onde podemos passar um array de requisições
@@ -124,8 +152,13 @@ const Repository: FC = () => {
                 <span>Issues abertas</span>
               </li>
               <li>
-                <FaHeart size={30} />
-                <span>Favoritar</span>
+                <button type="button" onClick={addToFavorite}>
+                  <FaHeart
+                    size={30}
+                    color={isFavorite ? '#d81e5b' : '#6c6c80'}
+                  />
+                  <span>Favoritar</span>
+                </button>
               </li>
             </ul>
           </div>

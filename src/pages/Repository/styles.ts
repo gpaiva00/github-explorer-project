@@ -87,12 +87,16 @@ export const RepositoryInfo = styled.section`
         display: block;
         margin-bottom: 16px;
         cursor: pointer;
-        color: #6c6c80;
+        /* color: #6c6c80; */
         transition: color 0.2s;
 
         &:hover {
           color: #d81e5b;
         }
+      }
+
+      button {
+        border: 0;
       }
 
       strong {
