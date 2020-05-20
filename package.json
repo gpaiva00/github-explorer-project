@@ -14,6 +14,7 @@
     "babel-loader": "^8.1.0",
     "polished": "^3.6.3",
     "react": "^16.13.1",
+    "react-autosuggest": "^10.0.2",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-router-dom": "^5.2.0",
@@ -40,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-autosuggest": "^9.3.14",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^2.33.0",

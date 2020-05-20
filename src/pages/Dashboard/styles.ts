@@ -17,6 +17,8 @@ export const Title = styled.h1`
   }
 `;
 
+export const FormGroup = styled.div``;
+
 export const Form = styled.form<FormProps>`
   margin-top: 40px;
   max-width: 700px;
@@ -25,6 +27,7 @@ export const Form = styled.form<FormProps>`
   input {
     flex: 1;
     height: 70px;
+    width: 490px;
     padding: 0 24px;
     border: 0;
     border-radius: 5px 0 0 5px;
@@ -39,6 +42,40 @@ export const Form = styled.form<FormProps>`
     &::placeholder {
       color: #a8a8b3;
     }
+  }
+
+  .react-autosuggest__container {
+    position: relative;
+  }
+
+  .react-autosuggest__suggestions-container {
+    display: none;
+  }
+
+  .react-autosuggest__suggestions-container--open {
+    display: block;
+    position: absolute;
+    top: 68px;
+    width: 490px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    border-radius: 0 0 5px 5px;
+    z-index: 2;
+  }
+
+  .react-autosuggest__suggestions-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .react-autosuggest__suggestion {
+    cursor: pointer;
+    padding: 10px 20px;
+  }
+
+  .react-autosuggest__suggestion--highlighted {
+    background-color: #ddd;
   }
 
   button {
@@ -73,38 +110,36 @@ export const Form = styled.form<FormProps>`
   }
 `;
 
-export const SugestionList = styled.ul`
-  position: absolute;
-  display: block;
-  border: 0.5px solid #cbcbd3;
-  border-radius: 0 0 5px 5px;
-  border-top-width: 0;
-  list-style: none;
-  margin-top: 0;
-  max-height: 143px;
-  overflow-y: auto;
-  padding-left: 0;
-  max-width: 490px;
-  align-items: center;
-  /* justify-content: flex-start; */
-  background-color: #fff;
+// export const SugestionList = styled.ul`
+//   /* position: absolute; */
+//   display: block;
+//   border: 1px solid #fff;
+//   border-radius: 0 0 5px 5px;
+//   border-top-width: 0;
+//   list-style: none;
+//   margin-top: -3px;
+//   max-height: 143px;
+//   overflow-y: auto;
+//   padding-left: 0;
+//   max-width: 490px;
+//   background-color: #fff;
 
-  li {
-    padding: 10px 18px;
-    color: #a8a8b3;
-    transition: font-weight 0.2s;
+//   li {
+//     padding: 10px 18px;
+//     color: #a8a8b3;
+//     transition: font-weight 0.2s;
 
-    &:hover {
-      color: #3a3a3a3;
-      cursor: pointer;
-      font-weight: 700;
-    }
+//     &:hover {
+//       color: #3a3a3a3;
+//       cursor: pointer;
+//       font-weight: 700;
+//     }
 
-    &:not(:last-of-type) {
-      border-bottom: 0.5px solid #cbcbd3;
-    }
-  }
-`;
+//     &:not(:last-of-type) {
+//       /* border-bottom: 0.5px solid #cbcbd3; */
+//     }
+//   }
+// `;
 
 export const Repositories = styled.div`
   margin-top: 80px;
