@@ -36,7 +36,7 @@ const Dashboard: FC = () => {
     () => localStorage.getItem('@Githubexplorer:inputValue') || ''
   );
 
-  const { favorites, setFavorites } = useContext(AppContext);
+  const { favorites } = useContext(AppContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
