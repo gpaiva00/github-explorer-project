@@ -89,14 +89,17 @@ const Dashboard: FC = () => {
     if (value.newValue.indexOf('/') !== -1 && !userRepositories.length)
       handleSearchByUser();
 
-    if (!value.newValue.length) setUserRepositories([]);
+    if (!value.newValue.length) {
+      localStorage.setItem('@Githubexplorer:inputValue', '');
+      setUserRepositories([]);
+    }
 
     setInputValue(value.newValue);
   }
 
   function getSuggestions(value: string): Repository[] {
     if (value.indexOf('/') === -1) return [];
-
+    console.log(value);
     const [, repository] = value.split('/');
     const repositoryName = repository.trim().toLowerCase();
     const repositoryLength = repositoryName.length;
@@ -109,6 +112,11 @@ const Dashboard: FC = () => {
             repo.name.toLowerCase().slice(0, repositoryLength) ===
             repositoryName
         );
+  }
+
+  function handleSuggestionClick(suggestion: Repository): string {
+    localStorage.setItem('@Githubexplorer:inputValue', suggestion.full_name);
+    return suggestion.full_name;
   }
 
   // Autosuggest will pass through all these props to the input.
@@ -125,6 +133,14 @@ const Dashboard: FC = () => {
     );
   }, [repositories]);
 
+  useEffect(() => {
+    const storagedInputValue = localStorage.getItem(
+      '@Githubexplorer:inputValue'
+    );
+
+    if (storagedInputValue) setInputValue(storagedInputValue);
+  }, []);
+
   return (
     <>
       <img src={logoImg} alt="Github explorer" />
@@ -139,7 +155,7 @@ const Dashboard: FC = () => {
           onSuggestionsClearRequested={() => {
             setSuggestions([]);
           }}
-          getSuggestionValue={(suggestion: Repository) => suggestion.full_name}
+          getSuggestionValue={handleSuggestionClick}
           renderSuggestion={(suggestion: Repository) => (
             <div>{suggestion.name}</div>
           )}
