@@ -57,6 +57,8 @@ export const Form = styled.form<FormProps>`
     position: absolute;
     top: 68px;
     width: 490px;
+    max-height: 200px;
+    overflow: auto;
     border: 1px solid #fff;
     background-color: #fff;
     border-radius: 0 0 5px 5px;

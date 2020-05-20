@@ -5,7 +5,7 @@ import React, {
   FormEvent,
   KeyboardEvent,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 
 import { FiChevronRight } from 'react-icons/fi';
@@ -25,15 +25,15 @@ interface Repository {
   };
 }
 
-interface inputProps {
+interface InputProps {
   newValue: string;
 }
 
 const Dashboard: FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [userRepositories, setUserRepositories] = useState<Repository[]>([]);
   const [suggestions, setSuggestions] = useState<Repository[]>([]);
+  const [inputValue, setInputValue] = useState('');
   const [repositories, setRepositories] = useState<Repository[]>(() => {
     const storagedRepositories = localStorage.getItem(
       '@Githubexplorer:repositories'
@@ -43,64 +43,78 @@ const Dashboard: FC = () => {
     return [];
   });
 
+  const history = useHistory();
+
   async function handleSearchByUser(): Promise<void> {
-    const [user] = searchTerm.split('/');
+    const [user] = inputValue.split('/');
 
     if (!user) return;
 
     const { data } = await api.get<Repository[]>(`users/${user.trim()}/repos`);
 
     setUserRepositories([...userRepositories, ...data]);
+    setErrorMessage('');
   }
 
-  async function handleAddRepository(
+  async function addToFavorite(
     event: FormEvent<HTMLFormElement>
   ): Promise<void> {
-    event.preventDefault();
-
-    if (!searchTerm) return setErrorMessage('Digite o usuário "/" repositório');
-
     try {
-      const { data: repo } = await api.get<Repository>(`repos/${searchTerm}`);
+      const { data: repo } = await api.get<Repository>(`repos/${inputValue}`);
 
       setRepositories([...repositories, repo]);
-      setSearchTerm('');
       setErrorMessage('');
     } catch {
-      setErrorMessage('Não foi possível buscar esse repositório');
+      setErrorMessage('Não foi possível adicionar esse repositório');
     }
+  }
+
+  // eslint-disable-next-line consistent-return
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+
+    const [user, repository] = inputValue.split('/');
+    const searchTermIsNotValid = !user.length && !repository.length;
+
+    if (searchTermIsNotValid)
+      return setErrorMessage('Digite o usuário "/" repositório');
+
+    history.push(`/repository/${inputValue}`);
   }
 
   function onChange(
     event: React.SyntheticEvent<HTMLElement>,
-    value: inputProps
+    value: InputProps
   ): void {
     if (value.newValue.indexOf('/') !== -1 && !userRepositories.length)
       handleSearchByUser();
 
     if (!value.newValue.length) setUserRepositories([]);
 
-    setSearchTerm(value.newValue);
+    setInputValue(value.newValue);
   }
 
   function getSuggestions(value: string): Repository[] {
     if (value.indexOf('/') === -1) return [];
 
-    const inputValue = value.split('/')[1].trim().toLowerCase();
-    const inputLength = inputValue.length;
+    const [, repository] = value.split('/');
+    const repositoryName = repository.trim().toLowerCase();
+    const repositoryLength = repositoryName.length;
 
     // eslint-disable-next-line consistent-return
     return value.indexOf('/') === -1
       ? []
       : userRepositories.filter(
-          (repo) => repo.name.toLowerCase().slice(0, inputLength) === inputValue
+          (repo) =>
+            repo.name.toLowerCase().slice(0, repositoryLength) ===
+            repositoryName
         );
   }
 
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
     placeholder: 'Nome de usuário / nome do repositório',
-    value: searchTerm,
+    value: inputValue,
     onChange,
   };
 
@@ -116,15 +130,7 @@ const Dashboard: FC = () => {
       <img src={logoImg} alt="Github explorer" />
       <Title>Explore repositórios no Github</Title>
 
-      {/* onSubmit={handleAddRepository} */}
-      <Form hasError={!!errorMessage}>
-        {/* <input
-          id="inputSearch"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyUp={(e) => handleSearchByUser(e)}
-          placeholder="Digite aqui o nome do repositório"
-        /> */}
+      <Form onSubmit={handleSubmit} hasError={!!errorMessage}>
         <Autosuggest
           suggestions={suggestions}
           onSuggestionsFetchRequested={({ value }) => {
@@ -133,7 +139,7 @@ const Dashboard: FC = () => {
           onSuggestionsClearRequested={() => {
             setSuggestions([]);
           }}
-          getSuggestionValue={(suggestion: Repository) => suggestion.name}
+          getSuggestionValue={(suggestion: Repository) => suggestion.full_name}
           renderSuggestion={(suggestion: Repository) => (
             <div>{suggestion.name}</div>
           )}
