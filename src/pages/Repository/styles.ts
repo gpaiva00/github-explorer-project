@@ -78,6 +78,23 @@ export const RepositoryInfo = styled.section`
         margin-left: 80px;
       }
 
+      & + svg {
+        display: flex;
+        align-items: center;
+      }
+
+      svg {
+        display: block;
+        margin-bottom: 16px;
+        cursor: pointer;
+        color: #6c6c80;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #d81e5b;
+        }
+      }
+
       strong {
         display: block;
         font-size: 36px;

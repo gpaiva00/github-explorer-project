@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FaHeart } from 'react-icons/fa';
 
 import api from '../../services/api';
 
@@ -108,20 +109,26 @@ const Repository: FC = () => {
               <small>Atualizado em: {getDate(repository.updated_at)}</small>
             </div>
           </header>
-          <ul>
-            <li>
-              <strong>{repository.stargazers_count}</strong>
-              <span>Stars</span>
-            </li>
-            <li>
-              <strong>{repository.forks_count}</strong>
-              <span>Forks</span>
-            </li>
-            <li>
-              <strong>{repository.open_issues_count}</strong>
-              <span>Issues abertas</span>
-            </li>
-          </ul>
+          <div>
+            <ul>
+              <li>
+                <strong>{repository.stargazers_count}</strong>
+                <span>Stars</span>
+              </li>
+              <li>
+                <strong>{repository.forks_count}</strong>
+                <span>Forks</span>
+              </li>
+              <li>
+                <strong>{repository.open_issues_count}</strong>
+                <span>Issues abertas</span>
+              </li>
+              <li>
+                <FaHeart size={30} />
+                <span>Favoritar</span>
+              </li>
+            </ul>
+          </div>
         </RepositoryInfo>
       )}
 
