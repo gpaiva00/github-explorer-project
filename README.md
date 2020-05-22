@@ -2,6 +2,10 @@
   <img src="./src/assets/logo.svg" style="margin: 16px 80px"/>
 </p>
 
+[![Author](https://img.shields.io/badge/author-GabrielPaiva-7159c1?style=flat-square)](https://github.com/gpaiva00)
+[![Languages](https://img.shields.io/github/languages/count/gpaiva00/github-explorer-project?color=7159c1&style=flat-square)](#)
+[![Contributors](https://img.shields.io/github/contributors/gpaiva00/github-explorer-project?color=7159c1&style=flat-square)](https://github.com/gpaiva00/github-explorer-project/graphs/contributors)
+
 > Beautiful application to explore all Github projects, see it's opened issues and more!
 
 <p align="center">
