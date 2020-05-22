@@ -11,7 +11,7 @@
 # :page_facing_up: Table of Contents
 
 * [Features](#rocket-features)
-* [Installation](#)
+* [Installation](#outbox_tray-installation)
 * [Getting Started](#runner-getting-started)
 
 # :rocket: Features
