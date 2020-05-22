@@ -20,7 +20,7 @@
 * 🔍 Search for any Github repo to see more about it like stars, forks, opened issues
 * 💜 Add repositories to you favorites list
 
-# :outbox_tray: Instalattion
+# :outbox_tray: Installation
 Open your terminal
 
 Type command below to clone this repo via HTTPS:
